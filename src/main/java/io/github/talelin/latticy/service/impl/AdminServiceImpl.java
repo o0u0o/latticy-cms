@@ -15,11 +15,8 @@ import io.github.talelin.latticy.dto.admin.ResetPasswordDTO;
 import io.github.talelin.latticy.dto.admin.UpdateGroupDTO;
 import io.github.talelin.latticy.dto.admin.UpdateUserInfoDTO;
 import io.github.talelin.latticy.mapper.GroupPermissionMapper;
-import io.github.talelin.latticy.model.GroupDO;
-import io.github.talelin.latticy.model.GroupPermissionDO;
-import io.github.talelin.latticy.model.PermissionDO;
-import io.github.talelin.latticy.model.UserDO;
-import io.github.talelin.latticy.model.UserIdentityDO;
+import io.github.talelin.latticy.mapper.UserGroupMapper;
+import io.github.talelin.latticy.model.*;
 import io.github.talelin.latticy.service.AdminService;
 import io.github.talelin.latticy.service.GroupService;
 import io.github.talelin.latticy.service.PermissionService;
@@ -58,6 +55,9 @@ public class AdminServiceImpl implements AdminService {
     @Autowired
     private GroupPermissionMapper groupPermissionMapper;
 
+    @Autowired
+    private UserGroupMapper userGroupMapper;
+
     @Override
     public IPage<UserDO> getUserPageByGroupId(Integer groupId, Integer count, Integer page) {
         Page<UserDO> pager = new Page<>(page, count);
@@ -84,10 +84,15 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public boolean deleteUser(Integer id) {
         throwUserNotExistById(id);
+        if (userService.getRootUserId().equals(id)) {
+            throw new ForbiddenException(10079);
+        }
         boolean userRemoved = userService.removeById(id);
         QueryWrapper<UserIdentityDO> wrapper = new QueryWrapper<>();
         wrapper.lambda().eq(UserIdentityDO::getUserId, id);
-        return userRemoved && userIdentityService.remove(wrapper);
+        // 删除用户，还应当将 user_group表中的数据删除
+        boolean deleteResult = userGroupMapper.deleteByUserId(id) > 0;
+        return userRemoved && userIdentityService.remove(wrapper) && deleteResult;
     }
 
     @Override
@@ -159,6 +164,10 @@ public class AdminServiceImpl implements AdminService {
             throw new ForbiddenException(10075);
         }
         throwGroupNotExistById(id);
+        List<Integer> groupUserIds = groupService.getGroupUserIds(id);
+        if(groupUserIds.size() > 0) {
+            throw new ForbiddenException(10027);
+        }
         return groupService.removeById(id);
     }
 

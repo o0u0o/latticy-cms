@@ -1,16 +1,13 @@
 package io.github.talelin.latticy.service.impl;
 
-import cn.hutool.core.bean.BeanUtil;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import io.github.talelin.latticy.bo.FileBO;
-import io.github.talelin.latticy.module.file.FileConstant;
-import io.github.talelin.latticy.module.file.FileProperties;
-import io.github.talelin.latticy.module.file.Uploader;
 import io.github.talelin.latticy.mapper.FileMapper;
 import io.github.talelin.latticy.model.FileDO;
+import io.github.talelin.latticy.module.file.*;
 import io.github.talelin.latticy.service.FileService;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.multipart.MultipartFile;
@@ -21,6 +18,7 @@ import java.util.List;
 /**
  * @author pedro@TaleLin
  * @author Juzi@TaleLin
+ * @author colorful@TaleLin
  */
 @Service
 public class FileServiceImpl extends ServiceImpl<FileMapper, FileDO> implements FileService {
@@ -43,19 +41,29 @@ public class FileServiceImpl extends ServiceImpl<FileMapper, FileDO> implements 
     @Override
     public List<FileBO> upload(MultiValueMap<String, MultipartFile> fileMap) {
         List<FileBO> res = new ArrayList<>();
-        uploader.upload(fileMap, file -> {
-            FileDO found = this.baseMapper.selectByMd5(file.getMd5());
-            // 数据库中不存在
-            if (found == null) {
-                FileDO fileDO = new FileDO();
-                BeanUtil.copyProperties(file, fileDO);
-                this.getBaseMapper().insert(fileDO);
-                res.add(transformDoToBo(fileDO, file.getKey()));
-                return true;
+
+        uploader.upload(fileMap, new UploadHandler() {
+            @Override
+            public boolean preHandle(File file) {
+                FileDO found = baseMapper.selectByMd5(file.getMd5());
+                // 数据库中不存在，存储操作放在上传到本地或云上之后，
+                // 修复issue131：https://github.com/TaleLin/lin-cms-spring-boot/issues/131
+                if (found == null) {
+                    return true;
+                }
+                // 已存在，则直接转化返回
+                res.add(transformDoToBo(found, file.getKey()));
+                return false;
             }
-            // 已存在，则直接转化返回
-            res.add(transformDoToBo(found, file.getKey()));
-            return false;
+
+            @Override
+            public void afterHandle(File file) {
+                // 保存到数据库, 修复issue131：https://github.com/TaleLin/lin-cms-spring-boot/issues/131
+                FileDO fileDO = new FileDO();
+                BeanUtils.copyProperties(file, fileDO);
+                getBaseMapper().insert(fileDO);
+                res.add(transformDoToBo(fileDO, file.getKey()));
+            }
         });
         return res;
     }
@@ -67,7 +75,7 @@ public class FileServiceImpl extends ServiceImpl<FileMapper, FileDO> implements 
 
     private FileBO transformDoToBo(FileDO file, String key) {
         FileBO bo = new FileBO();
-        BeanUtil.copyProperties(file, bo);
+        BeanUtils.copyProperties(file, bo);
         if (file.getType().equals(FileConstant.LOCAL)) {
             String s = fileProperties.getServePath().split("/")[0];
 

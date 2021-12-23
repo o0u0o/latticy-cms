@@ -1,14 +1,11 @@
 package io.github.talelin.latticy.controller.v1;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import io.github.talelin.latticy.dto.book.CreateOrUpdateBookDTO;
 import io.github.talelin.latticy.mapper.BookMapper;
 import io.github.talelin.latticy.model.BookDO;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -16,19 +13,14 @@ import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.http.MediaType;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.transaction.annotation.Transactional;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @Transactional
 @Rollback
@@ -43,14 +35,11 @@ public class BookControllerTest {
     private BookMapper bookMapper;
 
     private Integer id;
-    private String title = "千里之外";
-    private String author = "pedro";
-    private String image = "千里之外.png";
-    private String summary = "千里之外，是周杰伦和费玉清一起发售的歌曲";
+    private final String title = "千里之外";
+    private final String author = "pedro";
+    private final String image = "千里之外.png";
+    private final String summary = "千里之外，是周杰伦和费玉清一起发售的歌曲";
 
-    @Before
-    public void setUp() throws Exception {
-    }
 
     @Test
     public void getBook() throws Exception {
@@ -111,7 +100,7 @@ public class BookControllerTest {
         dto.setTitle(title);
 
         ObjectMapper mapper = new ObjectMapper();
-        mapper.setPropertyNamingStrategy(PropertyNamingStrategy.CAMEL_CASE_TO_LOWER_CASE_WITH_UNDERSCORES);
+        mapper.setPropertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE);
         String content = mapper.writeValueAsString(dto);
 
         mvc.perform(post("/v1/book/")
@@ -139,13 +128,13 @@ public class BookControllerTest {
         dto.setTitle(title + "lol");
 
         ObjectMapper mapper = new ObjectMapper();
-        mapper.setPropertyNamingStrategy(PropertyNamingStrategy.CAMEL_CASE_TO_LOWER_CASE_WITH_UNDERSCORES);
+        mapper.setPropertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE);
         String content = mapper.writeValueAsString(dto);
 
         mvc.perform(put("/v1/book/" + this.id)
                 .contentType(MediaType.APPLICATION_JSON).content(content))
                 .andDo(print())
-                .andExpect(status().isCreated())
+                .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.
                         jsonPath("$.message").value("更新图书成功"));
     }
@@ -162,13 +151,9 @@ public class BookControllerTest {
 
         mvc.perform(delete("/v1/book/" + this.id))
                 .andDo(print())
-                .andExpect(status().isCreated())
+                .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.
                         jsonPath("$.message").value("删除图书成功"));
     }
 
-
-    @After
-    public void tearDown() throws Exception {
-    }
 }

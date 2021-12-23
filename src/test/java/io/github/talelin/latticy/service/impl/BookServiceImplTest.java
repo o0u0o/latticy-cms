@@ -3,20 +3,18 @@ package io.github.talelin.latticy.service.impl;
 import io.github.talelin.latticy.dto.book.CreateOrUpdateBookDTO;
 import io.github.talelin.latticy.mapper.BookMapper;
 import io.github.talelin.latticy.model.BookDO;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-@RunWith(SpringRunner.class)
+
 @SpringBootTest
 @Transactional
 @Rollback
@@ -29,10 +27,10 @@ public class BookServiceImplTest {
     @Autowired
     private BookMapper bookMapper;
 
-    private String title = "千里之外";
-    private String author = "pedro";
-    private String image = "千里之外.png";
-    private String summary = "千里之外，是周杰伦和费玉清一起发售的歌曲";
+    private final String title = "千里之外";
+    private final String author = "pedro";
+    private final String image = "千里之外.png";
+    private final String summary = "千里之外，是周杰伦和费玉清一起发售的歌曲";
 
     @Test
     public void createBook() {
