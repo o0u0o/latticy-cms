@@ -18,11 +18,11 @@ import java.util.List;
 @Builder
 public class PageResponseVO<T> {
 
-    private Integer total;
+    private Long total;
 
     private List<T> items;
 
-    private Integer page;
+    private Long page;
 
-    private Integer count;
+    private Long count;
 }
