@@ -1,7 +1,6 @@
 package io.github.talelin.latticy.service;
 
 import io.github.talelin.latticy.dto.banner.BannerDTO;
-import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * 轮播业务实现类
@@ -16,7 +15,7 @@ public interface BannerService  {
     * @param dto
     * @param id
     */
-   public void updateById(BannerDTO dto, Long id);
+   public void update(BannerDTO dto, Long id);
 
 
 }

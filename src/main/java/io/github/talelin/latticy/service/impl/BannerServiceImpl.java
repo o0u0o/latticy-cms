@@ -6,6 +6,7 @@ import io.github.talelin.latticy.dto.banner.BannerDTO;
 import io.github.talelin.latticy.mapper.BannerMapper;
 import io.github.talelin.latticy.model.BannerDO;
 import io.github.talelin.latticy.service.BannerService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
@@ -22,12 +23,13 @@ public class BannerServiceImpl extends ServiceImpl<BannerMapper, BannerDO> imple
     private BannerMapper bannerMapper;
 
     @Override
-    public void updateById(BannerDTO dto, Long id) {
+    public void update(BannerDTO dto, Long id) {
         BannerDO bannerDO = this.getById(id);
         //判空
         if (ObjectUtils.isEmpty(bannerDO)){
             throw new NotFoundException(20000);
         }
-
+        BeanUtils.copyProperties(dto, bannerDO);
+        this.updateById(bannerDO);
     }
 }
