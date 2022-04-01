@@ -48,6 +48,11 @@ public class BannerController {
         return new DeletedVO();
     }
 
+    @GetMapping("/{id}")
+    public void getWithItems(@PathVariable @Positive Long id){
+
+    }
+
     /**
      * 获取轮播
      * @param page 第几页
