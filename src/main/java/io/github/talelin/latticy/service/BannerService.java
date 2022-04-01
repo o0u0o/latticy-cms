@@ -1,6 +1,8 @@
 package io.github.talelin.latticy.service;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import io.github.talelin.autoconfigure.exception.NotFoundException;
 import io.github.talelin.latticy.bo.BannerWithItemsBO;
@@ -43,12 +45,23 @@ public class BannerService extends ServiceImpl<BannerMapper, BannerDO> {
       }
 
       //2、再查询bannerItem 条件构造器 wrapper 构造查询条件
-      QueryWrapper<BannerItemDO> wrapper = new QueryWrapper<>();
-      wrapper.eq("banner_id", id);
-      List<BannerItemDO> bannerItemDOList = bannerItemMapper.selectList(wrapper);
+      // 直接指定banner_id方式进行参数设置 直观一点 硬编码不方便维护
+      //QueryWrapper<BannerItemDO> wrapper = new QueryWrapper<>();
+      //wrapper.eq("banner_id", id);
+
+      LambdaQueryWrapper<BannerItemDO> wrapper = new LambdaQueryWrapper<>();
+      // lambda 形式进行查询参数设置 灵活一点 方便维护
+      wrapper.eq(BannerItemDO::getBannerId, id);
+
+      //Lambda链式调用(省代码 但是有点炫技，可读性不好)
+//      List<BannerItemDO> bannerItems = new LambdaQueryChainWrapper<BannerItemDO>(bannerItemMapper)
+//              .eq(BannerItemDO::getBannerId, id)
+//              .list();
+
+      List<BannerItemDO> bannerItems = bannerItemMapper.selectList(wrapper);
 
       //3、进行数据组装
-      return new BannerWithItemsBO(banner, bannerItemDOList);
+      return new BannerWithItemsBO(banner, bannerItems);
    }
 
    /**

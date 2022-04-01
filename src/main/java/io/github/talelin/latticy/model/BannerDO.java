@@ -46,9 +46,4 @@ public class BannerDO {
     @JsonIgnore
     @TableLogic
     private Date deleteTime;
-
-    /**
-     * 轮播详情
-     */
-    private List<BannerItemDO> bannerItems;
 }

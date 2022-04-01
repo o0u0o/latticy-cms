@@ -15,6 +15,10 @@ import java.util.List;
 @Repository
 public interface BannerMapper extends BaseMapper<BannerDO> {
 
+    /**
+     * <h2>获取所以轮播</h2>
+     * @return
+     */
     List<BannerDO> getAllBanners();
 
     @Select("SELECT * FROM banner")
