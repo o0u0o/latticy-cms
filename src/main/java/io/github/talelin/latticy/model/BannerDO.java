@@ -38,6 +38,10 @@ public class BannerDO {
     @JsonIgnore
     private Date updateTime;
 
+    /**
+     * 删除时间
+     * 注解@TableLogic 标记为逻辑删除
+     */
     @JsonIgnore
     @TableLogic
     private Date deleteTime;

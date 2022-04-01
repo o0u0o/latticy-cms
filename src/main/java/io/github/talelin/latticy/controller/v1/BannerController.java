@@ -30,6 +30,11 @@ public class BannerController {
     @Autowired
     private BannerService bannerService;
 
+    @GetMapping("/hi")
+    public String hi(@RequestBody(required = false) BannerDTO dto){
+        return "hi";
+    }
+
     @PutMapping("/{id}")
     public UpdatedVO update(@RequestBody @Validated BannerDTO dto,
                        @PathVariable @Positive Long id){

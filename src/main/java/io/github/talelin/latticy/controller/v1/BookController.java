@@ -67,6 +67,8 @@ public class BookController {
 
 
     @PutMapping("/{id}")
+    @GroupRequired
+    @PermissionMeta(value = "修改图书", module = "图书")
     public UpdatedVO updateBook(@PathVariable("id") @Positive(message = "{id.positive}") Integer id, @RequestBody @Validated CreateOrUpdateBookDTO validator) {
         BookDO book = bookService.getById(id);
         if (book == null) {
