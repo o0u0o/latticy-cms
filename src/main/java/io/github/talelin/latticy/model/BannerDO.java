@@ -10,6 +10,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * 轮播数据对象
@@ -45,4 +46,9 @@ public class BannerDO {
     @JsonIgnore
     @TableLogic
     private Date deleteTime;
+
+    /**
+     * 轮播详情
+     */
+    private List<BannerItemDO> bannerItems;
 }

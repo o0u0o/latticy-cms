@@ -1,14 +1,20 @@
 package io.github.talelin.latticy.service;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import io.github.talelin.autoconfigure.exception.NotFoundException;
+import io.github.talelin.latticy.bo.BannerWithItemsBO;
 import io.github.talelin.latticy.dto.banner.BannerDTO;
+import io.github.talelin.latticy.mapper.BannerItemMapper;
 import io.github.talelin.latticy.mapper.BannerMapper;
 import io.github.talelin.latticy.model.BannerDO;
+import io.github.talelin.latticy.model.BannerItemDO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
+
+import java.util.List;
 
 /**
  * 轮播业务实现类
@@ -22,14 +28,27 @@ public class BannerService extends ServiceImpl<BannerMapper, BannerDO> {
    @Autowired
    private BannerMapper bannerMapper;
 
-   public void getWithItems(Long id){
-      // 单表查询 先查询banner 再查询bannerItem
+   @Autowired
+   private BannerItemMapper bannerItemMapper;
+
+   /**
+    * <h2>获取Items</h2>
+    * @param id
+    */
+   public BannerWithItemsBO getWithItems(Long id){
+      // 1、单表查询 先查询banner
       BannerDO banner = this.getById(id);
       if (banner == null){
          throw new NotFoundException(20000);
       }
 
+      //2、再查询bannerItem 条件构造器 wrapper 构造查询条件
+      QueryWrapper<BannerItemDO> wrapper = new QueryWrapper<>();
+      wrapper.eq("banner_id", id);
+      List<BannerItemDO> bannerItemDOList = bannerItemMapper.selectList(wrapper);
 
+      //3、进行数据组装
+      return new BannerWithItemsBO(banner, bannerItemDOList);
    }
 
    /**
