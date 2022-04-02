@@ -43,6 +43,7 @@
             <artifactId>spring-boot-starter-websocket</artifactId>
         </dependency>
 
+        <!--   核心库更新     -->
         <dependency>
             <groupId>io.github.talelin</groupId>
             <artifactId>lin-cms-spring-boot-starter</artifactId>
