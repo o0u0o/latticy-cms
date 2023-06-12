@@ -43,6 +43,23 @@
             <artifactId>spring-boot-starter-websocket</artifactId>
         </dependency>
 
+        <!--   屏蔽掉tomcat，更换为jetty服务器     -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-tomcat</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <!--   依赖jetty     -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-jetty</artifactId>
+        </dependency>
+
         <!--   核心库更新     -->
         <dependency>
             <groupId>io.github.talelin</groupId>

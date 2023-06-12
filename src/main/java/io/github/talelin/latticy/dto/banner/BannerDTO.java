@@ -22,6 +22,7 @@ public class BannerDTO {
     @Length(min = 2, max = 30)
     private String title;
 
+    /** 图片URL */
     @Length(min = 2, max = 256)
     private String img;
 

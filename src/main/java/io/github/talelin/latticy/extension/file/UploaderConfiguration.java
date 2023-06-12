@@ -16,11 +16,22 @@ import org.springframework.core.annotation.Order;
 public class UploaderConfiguration {
     /**
      * @return 本地文件上传实现类
+     * 注解@ConditionalOnMissingBean 条件注解 当没有指定时默认实现时使用
      */
     @Bean
     @Order
     @ConditionalOnMissingBean
     public Uploader uploader(){
+        //默认的Uploader
         return new LocalUploader();
     }
+
+    /**
+     * <h2>七牛云的Uploader</h2>
+     * @return
+     */
+//    @Bean
+//    public Uploader qiniuUploader(){
+//        return new QiniuUploader();
+//    }
 }

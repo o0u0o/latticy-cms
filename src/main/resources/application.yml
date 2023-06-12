@@ -1,5 +1,17 @@
 #主配置文件
-
+server:
+  # jetty服务器默认是非阻塞的
+  jetty:
+    # 服务器线程池配置（acceptors线程池、selectors线程词、worker线程池）
+    threads:
+      # acceptors 线程池(是jetty线程池的其中一个)
+      acceptors: 4
+      # selectors 线程池(是jetty线程池的其中一个)
+      selectors: 8
+      # worker 线程池(是jetty线程池的其中一个) 需要更大的配置
+      min: 8
+      max: 200
+# spring相关配置
 spring:
   # 激活环境配置
   profiles:

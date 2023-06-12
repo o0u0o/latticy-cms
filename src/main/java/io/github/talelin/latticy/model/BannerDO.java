@@ -22,7 +22,8 @@ import java.util.List;
 @TableName("banner")
 public class BannerDO {
 
-    @TableId(value = "id", type = IdType.AUTO)
+    //细粒度权限控制 针对字段进行权限控制
+    //解决方案 1、动态SQL实现
     private Integer id;
 
     private String name;

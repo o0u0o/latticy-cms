@@ -29,7 +29,7 @@ import java.util.List;
  * @author Juzi@TaleLin
  */
 @RestController
-@RequestMapping("/v1/book")
+@RequestMapping("/v2/book")
 @Validated
 public class BookController {
 
@@ -65,7 +65,12 @@ public class BookController {
         return new CreatedVO(12);
     }
 
-
+    /**
+     * <h2>修改图书</h2>
+     * @param id
+     * @param validator
+     * @return
+     */
     @PutMapping("/{id}")
     @GroupRequired
     @PermissionMeta(value = "修改图书", module = "图书")

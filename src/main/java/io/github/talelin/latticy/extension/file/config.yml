@@ -4,7 +4,7 @@ lin:
   file:
     # 文件服务域名
     domain: http://localhost:5000/
-    # 排除文件类型
+    # 排除文件类型（如exe sh 等脚本文件）
     exclude:
     # 包括文件类型
     include:
