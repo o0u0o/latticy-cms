@@ -3,6 +3,7 @@ package io.github.talelin.latticy.controller.v1;
 import io.github.talelin.autoconfigure.exception.NotFoundException;
 import io.github.talelin.core.annotation.GroupRequired;
 import io.github.talelin.core.annotation.PermissionMeta;
+import io.github.talelin.core.annotation.PermissionModule;
 import io.github.talelin.latticy.dto.book.CreateOrUpdateBookDTO;
 import io.github.talelin.latticy.model.BookDO;
 import io.github.talelin.latticy.service.BookService;
@@ -31,6 +32,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/v2/book")
 @Validated
+@PermissionModule(value = "图书(Book)")
 public class BookController {
 
     @Autowired
@@ -45,6 +47,7 @@ public class BookController {
         return book;
     }
 
+    @PermissionMeta(value = "查询所有图书")
     @GetMapping("")
     public List<BookDO> getBooks() {
         List<BookDO> books = bookService.findAll();
@@ -52,6 +55,7 @@ public class BookController {
     }
 
 
+    @PermissionMeta(value = "搜索图书")
     @GetMapping("/search")
     public List<BookDO> searchBook(@RequestParam(value = "q", required = false, defaultValue = "") String q) {
         List<BookDO> books = bookService.getBookByKeyword("%" + q + "%");
