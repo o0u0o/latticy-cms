@@ -32,7 +32,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/v2/book")
 @Validated
-@PermissionModule(value = "图书(Book)")
+@PermissionModule(value = "图书(Book)模块")
 public class BookController {
 
     @Autowired

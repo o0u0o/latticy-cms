@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/cms/log")
-@PermissionModule(value = "日志")
+@PermissionModule(value = "日志模块")
 @Validated
 public class LogController {
     @Autowired

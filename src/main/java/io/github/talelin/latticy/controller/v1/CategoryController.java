@@ -1,6 +1,8 @@
 package io.github.talelin.latticy.controller.v1;
 
 
+import io.github.talelin.core.annotation.PermissionMeta;
+import io.github.talelin.core.annotation.PermissionModule;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -26,6 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
 */
 @RestController
 @RequestMapping("/v1/category")
+@PermissionModule(value = "分类(Category)")
 public class CategoryController {
 
     @PostMapping("")
@@ -34,6 +37,7 @@ public class CategoryController {
     }
 
     @PutMapping("/{id}")
+    @PermissionMeta(value = "修改分类", module = "分类")
     public UpdatedVO update(@PathVariable @Positive(message = "{id.positive}") Integer id) {
         return new UpdatedVO();
     }
