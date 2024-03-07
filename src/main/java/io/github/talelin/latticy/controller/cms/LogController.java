@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
+ * <h1>行为日志</h1>
  * @author pedro@TaleLin
  * @author Juzi@TaleLin
  */

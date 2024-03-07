@@ -29,7 +29,7 @@ import javax.validation.constraints.Positive;
 @RequestMapping("/v1/banner")
 @RestController
 @Validated
-@PermissionModule(value = "轮播(Banner)")
+@PermissionModule(value = "Banner")
 public class BannerController {
 
     @Autowired

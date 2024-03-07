@@ -28,7 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
 */
 @RestController
 @RequestMapping("/v1/category")
-@PermissionModule(value = "分类(Category)")
+@PermissionModule("分类")
 public class CategoryController {
 
     @PostMapping("")

@@ -30,7 +30,7 @@ import java.util.List;
  * @author Juzi@TaleLin
  */
 @RestController
-@RequestMapping("/v2/book")
+@RequestMapping("/v1/book")
 @Validated
 @PermissionModule(value = "图书(Book)模块")
 public class BookController {
