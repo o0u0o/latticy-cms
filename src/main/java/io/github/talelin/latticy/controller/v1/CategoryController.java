@@ -53,6 +53,7 @@ public class CategoryController {
     }
 
     @GetMapping("/page")
+    @PermissionMeta(value = "分类列表", module = "分类")
     public PageResponseVO<CategoryDO> page(
             @RequestParam(name = "page", required = false, defaultValue = "0")
             @Min(value = 0, message = "{page.number.min}") Integer page,
