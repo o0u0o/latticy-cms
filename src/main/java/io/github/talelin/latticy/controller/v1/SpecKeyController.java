@@ -1,6 +1,8 @@
 package io.github.talelin.latticy.controller.v1;
 
 
+import io.github.talelin.core.annotation.PermissionMeta;
+import io.github.talelin.core.annotation.PermissionModule;
 import io.github.talelin.latticy.service.SpecKeyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -30,6 +32,7 @@ import java.util.List;
 */
 @RestController
 @RequestMapping("/v1/spec-key")
+@PermissionModule("规格管理")
 public class SpecKeyController {
 
     @Autowired
@@ -46,6 +49,7 @@ public class SpecKeyController {
     }
 
     @DeleteMapping("/{id}")
+    @PermissionMeta(value = "删除规格名", module = "规格管理")
     public DeletedVO delete(@PathVariable @Positive(message = "{id.positive}") Integer id) {
         return new DeletedVO();
     }
@@ -61,6 +65,7 @@ public class SpecKeyController {
     }
 
     @GetMapping("/page")
+    @PermissionMeta(value = "规格名列表", module = "规格管理")
     public PageResponseVO<SpecKeyDO> page(
             @RequestParam(name = "page", required = false, defaultValue = "0")
             @Min(value = 0, message = "{page.number.min}") Integer page,

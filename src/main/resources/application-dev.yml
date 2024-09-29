@@ -5,6 +5,8 @@ server:
 
 
 spring:
+  application:
+    name: latticy-cms
   # 数据源配置，请修改为你项目的实际配置
   datasource:
     username: root
@@ -34,6 +36,33 @@ logging:
     # SQL日志记录
     io.github.talelin.latticy.mapper: debug
 
-
-
-
+####暴露端点给Prometheus采集 [必须] - START ####
+management:
+  endpoints:
+    web:
+      exposure:
+        # 暴露端口：metrics，其中就包含我们需要的JVM相关指标
+        # 需要暴露的端点：[health,info,metrics]用,分隔
+        include: info,metrics,prometheus
+  endpoint:
+    metrics:
+      enabled: true
+    prometheus:
+      enabled: true
+  metrics:
+    tags:
+      application: ${spring.application.name}
+    export:
+      prometheus:
+        pushgateway:
+          # 启用推送 如果不需要设置为false
+          enabled: true
+          username: admin
+          password: SN#dljy.13579
+          # PUSHGATEWAY 地址
+          baseUrl: 192.168.191.15:29091
+          # 推送周期 每隔15秒上报一次
+          pushRate: 15s
+          # job定义名
+          job : ${spring.application.name}
+#### 暴露端点给Prometheus采集 [必须] - END ####
